@@ -1,14 +1,14 @@
 import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
-import User from '../models/userModel.js';
-import Product from '../models/productModel.js';
+//import User from '../models/userModel.js';
+//import Product from '../models/productModel.js';
 import { isAuth, isAdmin, mailgun, payOrderEmailTemplate } from '../utils.js';
 
 const orderRouter = express.Router();
 
 //get all orders
-orderRouter.get(
+/*orderRouter.get(
   '/',
   isAuth,
   isAdmin,
@@ -16,7 +16,7 @@ orderRouter.get(
     const orders = await Order.find().populate('user', 'name');
     res.send(orders);
   })
-);
+);*/
 
 //add new order
 orderRouter.post(
@@ -28,7 +28,7 @@ orderRouter.post(
       shippingAddress: req.body.shippingAddress,
       paymentMethod: req.body.paymentMethod,
       itemsPrice: req.body.itemsPrice,
-      shippingPrice: req.body.shippingPrice,    
+      shippingPrice: req.body.shippingPrice,
       taxPrice: req.body.taxPrice,
       totalPrice: req.body.totalPrice,
       user: req.user._id,
@@ -40,7 +40,7 @@ orderRouter.post(
 );
 
 //summary of orders for admin
-orderRouter.get(
+/*orderRouter.get(
   '/summary',
   isAuth,
   isAdmin,
@@ -92,7 +92,7 @@ orderRouter.get(
     const orders = await Order.find({ user: req.user._id });
     res.send(orders);
   })
-);
+);*/
 
 //get order by id
 orderRouter.get(
@@ -109,7 +109,7 @@ orderRouter.get(
 );
 
 //After delivering the order
-orderRouter.put(
+/*orderRouter.put(
   '/:id/deliver',
   isAuth,
   expressAsyncHandler(async (req, res) => {
@@ -166,6 +166,6 @@ orderRouter.delete(
       res.status(404).send({ message: 'Order Not Found' });
     }
   })
-);
+);*/
 
 export default orderRouter;

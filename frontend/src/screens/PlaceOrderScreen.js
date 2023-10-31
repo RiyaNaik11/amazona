@@ -8,8 +8,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 import CheckoutSteps from '../components/CheckoutSteps';
 import { Store } from '../store';
-import { getError } from '../utils';
-import { Axios } from 'axios';
+import axios from 'axios'; // Make sure to import Axios
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -34,7 +33,7 @@ function PlaceOrderScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
 
-  const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100; // 123.2345 => 123.23
+  const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
   cart.itemsPrice = round2(
     cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
   );
@@ -46,11 +45,8 @@ function PlaceOrderScreen() {
     try {
       dispatch({ type: 'CREATE_REQUEST' });
 
-      // Make sure to import Axios if not already done
-      // import Axios from 'axios';
-
-      const { data } = await Axios.post(
-        '/api/orders',
+      const { data } = await axios.post(
+        'http://localhost:5000/api/orders', // Adjust the URL as needed
         {
           orderItems: cart.cartItems,
           shippingAddress: cart.shippingAddress,
@@ -62,7 +58,7 @@ function PlaceOrderScreen() {
         },
         {
           headers: {
-            authorization: `Bearer ${userInfo.token}`,
+            Authorization: `Bearer ${userInfo.token}`,
           },
         }
       );
@@ -72,7 +68,8 @@ function PlaceOrderScreen() {
       navigate(`/order/${data.order._id}`);
     } catch (err) {
       dispatch({ type: 'CREATE_FAIL' });
-      alert(getError(err)); // Make sure to define toast and getError functions
+      // Handle the error here, e.g., show an alert
+      console.error(err);
     }
   };
 
@@ -81,10 +78,6 @@ function PlaceOrderScreen() {
       navigate('/payment');
     }
   }, [cart, navigate]);
-
-  useEffect(() => {
-    document.title = 'Preview Order';
-  }, []);
 
   return (
     <div>
@@ -134,7 +127,7 @@ function PlaceOrderScreen() {
                       <Col md={3}>
                         <span>{item.quantity}</span>
                       </Col>
-                      <Col md={3}>${item.price}</Col>
+                      <Col md={3}>₹{item.price}</Col>
                     </Row>
                   </ListGroup.Item>
                 ))}
@@ -151,19 +144,19 @@ function PlaceOrderScreen() {
                 <ListGroup.Item>
                   <Row>
                     <Col>Items</Col>
-                    <Col>${cart.itemsPrice.toFixed(2)}</Col>
+                    <Col>₹{cart.itemsPrice.toFixed(2)}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Row>
                     <Col>Shipping</Col>
-                    <Col>${cart.shippingPrice.toFixed(2)}</Col>
+                    <Col>₹{cart.shippingPrice.toFixed(2)}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Row>
                     <Col>Tax</Col>
-                    <Col>${cart.taxPrice.toFixed(2)}</Col>
+                    <Col>₹{cart.taxPrice.toFixed(2)}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -172,7 +165,7 @@ function PlaceOrderScreen() {
                       <strong>Order Total</strong>
                     </Col>
                     <Col>
-                      <strong>${cart.totalPrice.toFixed(2)}</strong>
+                      <strong>₹{cart.totalPrice.toFixed(2)}</strong>
                     </Col>
                   </Row>
                 </ListGroup.Item>

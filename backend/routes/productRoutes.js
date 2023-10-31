@@ -10,7 +10,7 @@ productRouter.get('/', async (req, res) => {
   res.send(products);
 });
 
-productRouter.post(
+/*productRouter.post(
   '/',
   isAuth,
   isAdmin,
@@ -139,7 +139,7 @@ productRouter.get(
     const categories = await Product.find().distinct('category');
     res.send(categories);
   })
-);
+);*/
 
 //to find one specific product
 productRouter.get('/slug/:slug', async (req, res) => {

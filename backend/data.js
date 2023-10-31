@@ -1,7 +1,23 @@
+import bcrypt from 'bcryptjs';
+
 const data = {
+  users: [
+    {
+      name: 'Anjali',
+      email: 'anjali@gmail.com',
+      password: bcrypt.hashSync('123456'),
+      isAdmin: false,
+    },
+    {
+      name: 'Sahil',
+      email: 'sahil@gmail.com',
+      password: bcrypt.hashSync('abcdef'),
+      isAdmin: true,
+    },
+  ],
   products: [
     {
-      _id: '1',
+      //_id: '1',
       name: 'Floral pink dress',
       slug: 'Floral-pink-dress',
       category: 'Dress',
@@ -14,7 +30,7 @@ const data = {
       description: 'high quality',
     },
     {
-      _id: '2',
+      //_id: '2',
       name: 'yellow floral dress',
       slug: 'yellow-floral-dress',
       category: 'Dress',
@@ -27,7 +43,7 @@ const data = {
       description: 'high quality',
     },
     {
-      _id: '3',
+      //_id: '3',
       name: 'Burgandy Maxi Dress',
       slug: 'Burgandy-Maxi-Dress',
       category: 'Dress',

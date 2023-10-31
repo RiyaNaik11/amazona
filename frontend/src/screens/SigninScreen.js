@@ -2,9 +2,10 @@ import { useLocation, Link, useNavigate } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { Axios } from 'axios';
+import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { Store } from '../store';
+//import { getError } from '../utils';
 
 export default function SigninScreen() {
   const navigate = useNavigate();
@@ -20,17 +21,19 @@ export default function SigninScreen() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await Axios.post('/api/users/signin', {
+
+    const { data } = await axios.post(
+      'http://localhost:5000/api/users/signin',
+      {
         email,
         password,
-      });
-      ctxDispatch({ type: 'USER_SIGNIN', payload: data });
-      localStorage.setItem('userInfo', JSON.stringify(data));
-      navigate(redirect || '/');
-    } catch (err) {
-      alert('Invalid email or password');
-    }
+      }
+    );
+    console.log(email);
+    console.log(data);
+    ctxDispatch({ type: 'USER_SIGNIN', payload: data });
+    localStorage.setItem('userInfo', JSON.stringify(data));
+    navigate(redirect || '/');
   };
 
   useEffect(() => {
@@ -42,7 +45,7 @@ export default function SigninScreen() {
   return (
     <Container className="small-container">
       <h1 className="my-3">Sign In</h1>
-      <Form onSubmit={submitHandler}>
+      <Form onSubmit={(e) => submitHandler(e)}>
         <Form.Group className="mb-3" controlId="email">
           <Form.Label>Email</Form.Label> {/* Use Form.Label, not Form.Lable */}
           <Form.Control
@@ -53,7 +56,6 @@ export default function SigninScreen() {
         </Form.Group>
         <Form.Group className="mb-3" controlId="password">
           <Form.Label>Password</Form.Label>{' '}
-          {/* Use Form.Label, not Form.Lable */}
           <Form.Control
             type="password"
             required
@@ -62,7 +64,6 @@ export default function SigninScreen() {
         </Form.Group>
         <div className="mb-3">
           <Button type="submit">Sign In</Button>{' '}
-          {/* Use "submit" not "Submit" */}
         </div>
         <div className="mb-3">
           New Customer?{' '}

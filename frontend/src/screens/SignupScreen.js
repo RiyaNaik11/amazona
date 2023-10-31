@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -6,8 +6,8 @@ import Button from 'react-bootstrap/Button';
 //import { Helmet } from 'react-helmet-async';
 import { useContext, useEffect, useState } from 'react';
 
-//import { toast } from 'react-toastify';
-import { getError } from '../utils';
+// import { toast } from 'react-toastify';
+//import { getError } from '../utils';
 import { Store } from '../store';
 
 export default function SignupScreen() {
@@ -31,16 +31,21 @@ export default function SignupScreen() {
       return;
     }
     try {
-      const { data } = await Axios.post('/api/users/signup', {
-        name,
-        email,
-        password,
-      });
+      const { data } = await axios.post(
+        'http://localhost:5000/api/users/signup',
+        {
+          name,
+          email,
+          password,
+        }
+      );
+      console.log(data);
       ctxDispatch({ type: 'USER_SIGNIN', payload: data });
       localStorage.setItem('userInfo', JSON.stringify(data));
       navigate(redirect || '/');
     } catch (err) {
-      alert(getError(err));
+      // alert(getError(err));
+      console.log(err);
     }
   };
 
